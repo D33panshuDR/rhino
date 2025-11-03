@@ -79,6 +79,8 @@ class Controller:
         rc_channels = [65535] * 8  # Initialize all 8 channels to 0 (no change)
         rc_channels[throttle_channel - 1] = throttle_pwm
         rc_channels[steering_channel - 1] = steering_pwm
+
+        self.master.mav.srcSystem = 255  # Set source system ID to avoid conflicts
         
         self.master.mav.rc_channels_override_send(
             self.master.target_system,

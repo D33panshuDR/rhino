@@ -58,8 +58,8 @@ class Rhino:
         """
         try:
             # Map normalized inputs to PWM values
-            throttle_pwm = 1700 #self.controller._map_throttle(throttle,min_pwm=1100, max_pwm=1900)
-            steering_pwm = self.controller._map_steering(steering,min_pwm=1100, max_pwm=1900    )
+            throttle_pwm = self.controller._map_throttle(throttle,min_pwm=1500, max_pwm=1900)
+            steering_pwm = self.controller._map_steering(steering,min_pwm=1100, max_pwm=1900)
 
             # Send RC override command
             self.controller.send_rc_override(
