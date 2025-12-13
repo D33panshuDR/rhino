@@ -1,11 +1,13 @@
-import os
 import csv
+import os
 from datetime import datetime
+
 
 class Logger:
     """
     A simple CSV logger.
     """
+
     def __init__(self, log_dir: str, file_name_prefix: str):
         """
         Initializes the logger and creates the log file.
@@ -20,12 +22,14 @@ class Logger:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_name = f"{file_name_prefix}_{timestamp}.csv"
         self.log_file_path = os.path.join(log_dir, file_name)
-        
+
         try:
-            self.file_handle = open(self.log_file_path, 'w', newline='')
+            self.file_handle = open(self.log_file_path, "w", newline="")
             self.writer = csv.writer(self.file_handle)
         except IOError as e:
-            raise IOError(f"Could not create or open log file {self.log_file_path}: {e}")
+            raise IOError(
+                f"Could not create or open log file {self.log_file_path}: {e}"
+            )
 
     def log(self, data: list, is_header: bool = False):
         """
@@ -38,7 +42,7 @@ class Logger:
         try:
             # Write to CSV file
             self.writer.writerow(data)
-            
+
             # Log to terminal
             log_message = ", ".join(map(str, data))
             if is_header:
@@ -56,4 +60,3 @@ class Logger:
         """
         if self.file_handle:
             self.file_handle.close()
-
