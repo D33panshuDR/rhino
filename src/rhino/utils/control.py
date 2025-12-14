@@ -15,6 +15,7 @@ class Controller:
         """
         try:
             self.master = mavutil.mavlink_connection(connection_string, baud=115200)
+            self.master.mav.srcSystem = 255  # Set source system ID to avoid conflicts
         except Exception as e:
             raise IOError(f"Failed to connect to vehicle on {connection_string}: {e}")
 

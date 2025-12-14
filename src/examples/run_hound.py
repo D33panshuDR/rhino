@@ -1,27 +1,35 @@
 from rhino import init_hound
-from time import sleep
+from time import sleep, time
+
 
 
 def main():
-    hound = init_hound(connection_str="<hound-connnection-str>")
+    hound = init_hound(connection_str="/dev/ttyACM0")
     print(f"Initialized robot: {hound.name}")  # DEBUG
 
     print("Starting hound maneuver...")
 
-    # Move forward for 3 sec
-    print("FORWARD\t\t\t[3s]")
-    hound.send_velocity_cmd(throttle=0.5, steering=0.0)
-    sleep(3.0)
+    drive_duration = 3  # seconds
+    start_time = time()
+        
+    while time() - start_time < drive_duration:
+        # Send a command: 25% throttle, 0% right steer
+        hound.send_velocity_cmd(throttle=0.75, steering=0)
+        sleep(0.1) # Send commands at 10 Hz
+
+
 
     # Stop for 1 sec
-    print("STOP\t\t\t[1s]")
-    hound.apply_brake()
+    # print("STOP\t\t\t[1s]")
+    # hound.apply_brake()
     sleep(1.0)
 
-    # Turn left for 2 sec
-    print("TURN(LEFT)\t\t\t[1s]")
-    hound.send_velocity_cmd(steering=-1.0)
-    sleep(2.0)
+    start_time = time()
+        
+    while time() - start_time < drive_duration:
+        # Send a command: 25% throttle, 0% right steer
+        hound.send_velocity_cmd(throttle=0.25, steering=-1.0)
+        sleep(0.1) # Send commands at 10 Hz
 
     print("Hound maneuver complete")
     hound.close()
