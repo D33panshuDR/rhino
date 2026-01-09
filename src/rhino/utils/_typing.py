@@ -1,4 +1,20 @@
 from dataclasses import dataclass
+from typing import TypedDict
+
+
+class RobotFeedback(TypedDict):
+    """
+    Feedback from the robot on receiving velocity commands
+    """
+
+    success: bool
+    """Whether the command was successfully executed"""
+
+    throttle_pwm: int | None
+    """PWM sent to the throttle channel"""
+
+    steering_pwm: int | None
+    """PWM sent to the steering channel"""
 
 
 @dataclass

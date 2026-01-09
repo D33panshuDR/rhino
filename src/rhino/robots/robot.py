@@ -3,7 +3,7 @@ import time
 
 from rhino.utils.control import Controller
 from rhino.utils.log import Logger
-from rhino.utils._typing import RobotConfig
+from rhino.utils._typing import RobotConfig, RobotFeedback
 
 
 class Robot:
@@ -73,7 +73,9 @@ class Robot:
             # NOTE Verbosity intentional
             self.send_velocity_cmd(throttle=0.0, steering=0.0)
 
-    def send_velocity_cmd(self, throttle: float = 0.0, steering: float = 0.0):
+    def send_velocity_cmd(
+        self, throttle: float = 0.0, steering: float = 0.0
+    ) -> RobotFeedback:
         """
         Sends a velocity command to the rover and logs the data.
 
@@ -82,7 +84,7 @@ class Robot:
             steering (float): Steering command, normalized from -1.0 (left) to 1.0 (right).
 
         Returns:
-            bool: True if the command was sent and logged successfully, False otherwise.
+            RobotFeedback: A TypedDict containing the throttle and steering PWM values sent.
         """
         try:
             # Map normalized inputs to PWM values
@@ -131,14 +133,18 @@ class Robot:
                     servo_outputs.servo8_raw,
                 ]
                 self.logger.log(log_data)
-                return True
+                return RobotFeedback(
+                    success=True, throttle_pwm=throttle_pwm, steering_pwm=steering_pwm
+                )
             else:
                 print("WARN: Could not retrieve servo outputs. Skipping log entry.")
-                return False
+                return RobotFeedback(
+                    success=False, throttle_pwm=None, steering_pwm=None
+                )
 
         except Exception as e:
             print(f"ERROR: Failed to send velocity command: {e}", file=sys.stderr)
-            return False
+            return RobotFeedback(success=False, throttle_pwm=None, steering_pwm=None)
 
     def close(self):
         """
