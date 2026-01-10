@@ -14,6 +14,11 @@ RHINO: Final[RobotConfig] = RobotConfig(
         min_pwm=1100,
         max_pwm=1900,
     ),
+    brake=RCInputConfig(
+        channel=6,
+        min_pwm=1100,
+        max_pwm=1900,
+    )
 )
 
 

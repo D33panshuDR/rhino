@@ -144,6 +144,27 @@ class Controller:
             *rc_channels,
         )
 
+    def engage_brake(
+        self,
+        brake_pwm: int,
+        brake_channel: int,
+    ):
+        """
+        Sends an RC_CHANNELS_OVERRIDE message to engage the brake.
+
+        Args:
+            brake_pwm (int): The PWM value for the brake.
+            brake_channel (int): The channel number for brake (1-8).
+        """
+        rc_channels = [65535] * 8  # Initialize all 8 channels to 0 (no change)
+        rc_channels[brake_channel - 1] = brake_pwm
+
+        self.master.mav.rc_channels_override_send(  # type: ignore
+            self.master.target_system,  # type: ignore
+            self.master.target_component,  # type: ignore
+            *rc_channels,
+        )
+
     # type: ignore
     def close(self):
         """Closes the MAVLink connection."""

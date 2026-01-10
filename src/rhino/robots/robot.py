@@ -33,6 +33,7 @@ class Robot:
         # Define channel mapping
         self.THROTTLE_CHANNEL = config.throttle.channel
         self.STEERING_CHANNEL = config.steering.channel
+        self.BRAKE_CHANNEL = config.brake.channel if config.brake else None
 
         print("INFO: Initializing logger...")
         self.logger = Logger(log_dir, f"{config.name}_log")
@@ -67,11 +68,20 @@ class Robot:
 
     def apply_brake(self) -> None:
         if self.config.brake is not None:
-            # TODO Implement braking mechanism @D33panshuDR
-            pass
+            self.controller.engage_brake(
+                brake_channel=self.config.brake.channel,
+                brake_pwm=self.config.brake.max_pwm,
+            )
         else:
             # NOTE Verbosity intentional
             self.send_velocity_cmd(throttle=0.0, steering=0.0)
+    
+    def release_brake(self) -> None:
+        if self.config.brake is not None:
+            self.controller.engage_brake(
+                brake_channel=self.config.brake.channel,
+                brake_pwm=self.config.brake.min_pwm,
+            )
 
     def send_velocity_cmd(
         self, throttle: float = 0.0, steering: float = 0.0
